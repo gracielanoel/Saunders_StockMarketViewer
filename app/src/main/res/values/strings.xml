@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Saunders_StockSearchApp</string>
+    <string name="facebook_app_id">1738961726325450</string>
+    <string name="title_activity_facebook">Facebook Title</string>
+    <string name="clear_button">CLEAR</string>
+    <string name="quote_button">GET QUOTE</string>
+    <string name="up_down_arrow">UP/DOWN</string>
+
+</resources>

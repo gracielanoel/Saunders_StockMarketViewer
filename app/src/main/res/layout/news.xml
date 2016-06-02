@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/newsUrl"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        android:visibility="gone">
+    </TextView>
+
+
+    <com.example.graci.saunders_stocksearchapp.news_underliner
+        android:id="@+id/newsTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/colorBlack"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:clickable="true" />
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/newsContent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp">
+    </TextView>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/newsPublisher"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/colorBlack"
+        android:textSize="13sp">
+    </TextView>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/newsDate"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/colorBlack"
+        android:textSize="13sp">
+    </TextView>
+
+</LinearLayout>
