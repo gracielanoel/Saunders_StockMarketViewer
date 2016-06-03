@@ -95,7 +95,8 @@
                 android:text="Auto Refresh"
                 android:layout_marginLeft="60dp"
                 android:switchTextAppearance="@style/SwitchTextAppearance"
-                android:id="@+id/autoRefresh" />
+                android:id="@+id/autoRefresh"
+                android:onClick="autoRefresh"/>
 
             <Button
                 android:id="@+id/refreshButton"
@@ -116,7 +117,8 @@
             <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
                 android:id="@+id/fav_details"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"/>
+                android:layout_height="fill_parent"
+                tools:listitem="@layout/favorite_layout"/>
 
         </LinearLayout>
 

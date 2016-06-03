@@ -65,7 +65,7 @@ public class json_object_parser {
             json = sb.toString();
             //Log.i("JSON FROM URL",json);
             json = json.replace("\\","");
-            Log.d("Before substring:", json);
+            //Log.d("Before substring:", json);
             json = json.substring(2,json.length()-2);
             //Log.i("JSON FROM URL After",json);
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class json_object_parser {
 
         // try parse the string to a JSON object
         try {
-            Log.d("after substring:", json);
+            //Log.d("after substring:", json);
             jObj = new JSONObject(json);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());

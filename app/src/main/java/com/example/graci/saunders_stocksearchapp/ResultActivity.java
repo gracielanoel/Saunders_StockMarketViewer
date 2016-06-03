@@ -386,7 +386,7 @@ public class ResultActivity extends Activity {
                 "<body>\n" +
                 " \n" +
                 " <div class=\"row\" id=\"history\">                                \t\n" +
-                " \t<div id=\"historyContainer\"  class=\"col-md-10\" style=\"width:70% !important\"></div>\n" +
+                " \t<div id=\"historyContainer\"  class=\"col-md-10\" style=\"width:95% !important\"></div>\n" +
                 " </div>\n" +
                 " \n" +
                 "</body>\n" +
@@ -1084,7 +1084,8 @@ public class ResultActivity extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(ResultActivity.this, yahooImgSrc, Toast.LENGTH_SHORT).show();
+            // TODO REMOVE
+            //Toast.makeText(ResultActivity.this, yahooImgSrc, Toast.LENGTH_SHORT).show();
 
         }
         protected Bitmap doInBackground(ListView... args) {

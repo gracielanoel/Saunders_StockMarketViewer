@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,14 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         actv = (AutoCompleteTextView)findViewById(R.id.autoCompleteTextView1);
 
-        //todo: old shared pref
-        for(int i=0;i<sharedpreferences.getAll().size();i++)
-        {
-            String symbol = sharedpreferences.getString("Symbol"+i,"");
-            String url = "http://graciela-stockphp-env.us-west-2.elasticbeanstalk.com/?getQuote=" + symbol;
-            new GetFavoriteOperation().execute(url);
-
-        }
+        populateFavList();
 
 
         //Autocomplete Functionality
@@ -167,9 +163,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refresh(View view) {
-        Toast.makeText(getApplicationContext(),
-                "Refresh clicked", Toast.LENGTH_SHORT).show();
+        populateFavList();
     }
+
+    public void populateFavList() {
+        //todo: old shared pref
+
+        ListView myFavView = (ListView)findViewById(R.id.fav_details);
+        myFavView.setAdapter(null);
+        myFavView.invalidate();
+
+        for(int i=0;i<sharedpreferences.getAll().size();i++)
+        {
+            String symbol = sharedpreferences.getString("Symbol"+i,"");
+            String url = "http://graciela-stockphp-env.us-west-2.elasticbeanstalk.com/?getQuote=" + symbol;
+            new GetFavoriteOperation().execute(url);
+        }
+    }
+
+    public void autoRefresh(final View view) {
+
+
+        /*TODO... turn this off!*/
+
+        final Handler handler = new Handler();
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Switch autoToggle = (Switch)view;
+                if(autoToggle != null && autoToggle.isChecked()) {
+                    Toast.makeText(getApplicationContext(),
+                            "Auto refreshing", Toast.LENGTH_SHORT).show();
+                    populateFavList();
+                    handler.postDelayed(this, 10000);
+                }
+            }
+        };
+
+        handler.postDelayed(runnable, 100);
+
+
+
+    }
+
 
     private class AutocompleteOperation extends AsyncTask<String, Void, JSONArray> {
         @Override
@@ -248,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
     private class GetQuoteOperation extends AsyncTask<String, Void, JSONObject> {
         String[] stockHeaders = {"NAME", "SYMBOL", "LASTPRICE", "CHANGE", "TIMESTAMP", "MARKETCAP", "VOLUME", "CHANGEYTD", "HIGH", "LOW", "OPEN"};
         private ProgressDialog progressDialog;
+        String symbolTest;
 
         @Override
         protected void onPreExecute() {
@@ -267,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected JSONObject doInBackground(String... urls) {
 
+            symbolTest = urls[0].substring(70);
             json_object_parser myParser = new json_object_parser();
             JSONObject myObject = myParser.getJSONFromUrl(urls[0]);
 
@@ -307,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if(status.contains("Failure")) {
                         adb = new AlertDialog.Builder(context);
-                        adb.setMessage("No stock information available for " + actv.getText().toString().toUpperCase()).setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        adb.setMessage("No stock information available for " + symbolTest.toUpperCase()).setNegativeButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
@@ -320,7 +359,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Intent getQuoteIntent = new Intent(MainActivity.this, ResultActivity.class);
                         getQuoteIntent.putExtra("json", result.toString());
-                        getQuoteIntent.putExtra("Symbol", actv.getText().toString());
+                        //getQuoteIntent.putExtra("Symbol", actv.getText().toString());
+                        getQuoteIntent.putExtra("Symbol", symbolTest);
                         startActivity(getQuoteIntent);
                     }
                 }
@@ -331,7 +371,6 @@ public class MainActivity extends AppCompatActivity {
     private class GetFavoriteOperation extends AsyncTask<String, Void, JSONObject> {
 
         String fb_name, fb_symbol, fb_lastPrice;
-        ArrayList<String> fbvalues; //TODO - modify
 
         @Override
         protected void onPreExecute() {
@@ -406,12 +445,12 @@ public class MainActivity extends AppCompatActivity {
                         TextView symbol = (TextView)rowView.findViewById(R.id.favSymbol);
                         String quoteSymbol = symbol.getText().toString();
                         String url = "http://graciela-stockphp-env.us-west-2.elasticbeanstalk.com/?getQuote=" + quoteSymbol;
-                        //new GetQuoteOperation().execute(url);
+                        new GetQuoteOperation().execute(url);
 
-                        Intent getQuoteIntent = new Intent(MainActivity.this, ResultActivity.class);
+                        /*Intent getQuoteIntent = new Intent(MainActivity.this, ResultActivity.class);
                         getQuoteIntent.putExtra("json", result.toString());
                         getQuoteIntent.putExtra("Symbol", quoteSymbol);
-                        startActivity(getQuoteIntent);
+                        startActivity(getQuoteIntent);*/
                     }
                 });
 
@@ -421,8 +460,6 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedpreferences.edit();
 
                         for(int i: reverseSortedPositions ) {
-                            Toast.makeText(getApplicationContext(),
-                                    "position: " + i, Toast.LENGTH_SHORT).show();
                             favMaps.remove(i);
                             favAdapter.notifyDataSetChanged();
 

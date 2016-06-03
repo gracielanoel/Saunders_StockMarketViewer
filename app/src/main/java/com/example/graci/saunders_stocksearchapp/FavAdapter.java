@@ -40,6 +40,8 @@ public class FavAdapter extends SimpleAdapter implements UndoAdapter {
         mContext = context;
     }
 
+
+
     @NonNull
     @Override
     public View getUndoView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
