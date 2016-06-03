@@ -142,6 +142,8 @@ public class ResultActivity extends Activity {
         //Populate Historical Data Tab
         WebView webView = (WebView) findViewById(R.id.historical);
         webView.getSettings().setJavaScriptEnabled(true);
+        //webView.getSettings().setLoadWithOverviewMode(true);
+        //webView.getSettings().setUseWideViewPort(true);
 
         //Create string of markit time series javascript/html code
         String historicalHtml = "<!doctype html>\n" +

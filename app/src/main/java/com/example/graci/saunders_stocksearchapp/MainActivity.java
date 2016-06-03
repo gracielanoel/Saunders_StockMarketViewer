@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(JSONObject result) {
+        protected void onPostExecute(final JSONObject result) {
 
             if(result == null ) {
                 //TODO
@@ -392,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                final FavAdapter favAdapter = new FavAdapter(getBaseContext(), favMaps, R.layout.favorites, from, to);
+                final FavAdapter favAdapter = new FavAdapter(getBaseContext(), favMaps, R.layout.favorite_layout, from, to);
 
                 DynamicListView favListView = (DynamicListView)findViewById(R.id.fav_details);
                 favListView.setAdapter(favAdapter);
@@ -406,18 +406,35 @@ public class MainActivity extends AppCompatActivity {
                         TextView symbol = (TextView)rowView.findViewById(R.id.favSymbol);
                         String quoteSymbol = symbol.getText().toString();
                         String url = "http://graciela-stockphp-env.us-west-2.elasticbeanstalk.com/?getQuote=" + quoteSymbol;
-                        new GetQuoteOperation().execute(url);
+                        //new GetQuoteOperation().execute(url);
+
+                        Intent getQuoteIntent = new Intent(MainActivity.this, ResultActivity.class);
+                        getQuoteIntent.putExtra("json", result.toString());
+                        getQuoteIntent.putExtra("Symbol", quoteSymbol);
+                        startActivity(getQuoteIntent);
                     }
                 });
 
                 SimpleSwipeUndoAdapter simpleSwipeUndoAdapter = new SimpleSwipeUndoAdapter(favAdapter, MainActivity.this, new OnDismissCallback() {
                     @Override
                     public void onDismiss(@NonNull ViewGroup listView, @NonNull int[] reverseSortedPositions) {
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+
                         for(int i: reverseSortedPositions ) {
                             Toast.makeText(getApplicationContext(),
                                     "position: " + i, Toast.LENGTH_SHORT).show();
                             favMaps.remove(i);
                             favAdapter.notifyDataSetChanged();
+
+                            //remove the item from shared preferences
+                            for (int j = i + 1; j < sharedpreferences.getAll().size(); j++) {
+                                int pos = j - 1;
+                                editor.putString("Symbol" + pos, sharedpreferences.getString("Symbol" + j, ""));
+                                editor.commit();
+                            }
+                            editor.remove("Symbol" + (sharedpreferences.getAll().size() - 1));
+                            editor.apply();
+                            editor.commit();
                         }
                     }
                 });
