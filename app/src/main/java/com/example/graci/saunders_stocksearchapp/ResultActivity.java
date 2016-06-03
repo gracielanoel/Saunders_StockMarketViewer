@@ -1113,9 +1113,25 @@ public class ResultActivity extends Activity {
                     public void onClick(View v) {
                         Toast.makeText(ResultActivity.this, "clicked!", Toast.LENGTH_SHORT).show();
                         builder = new AlertDialog.Builder(ResultActivity.this);
-                        builder.setView(view);
-                        mAttacher = new PhotoViewAttacher(view);
+
+                        ImageView view2 = new ImageView(getBaseContext());
+                        view2.setImageDrawable(view.getDrawable());
+                        view2.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                        builder.setView(view2);
+
+                        mAttacher = new PhotoViewAttacher(view2);
                         builder.show();
+
+                        //builder.getWindow().setLayout(600, 400);
+
+
+
+                        /*AlertDialog dialog = builder.create();
+                        LayoutInflater inflater = getLayoutInflater();
+                        View dialogLayout = inflater.inflate(R.layout.dialog_layout, null);
+                        ((ImageView)dialogLayout.findViewById(R.id.image)).setImageDrawable(view.getDrawable());
+                        dialog.setView(dialogLayout);*/
 
                     }
 

@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.SimpleAdapter;
@@ -22,6 +24,8 @@ import android.widget.Toast;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -108,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),
                 sharedpreferences.toString(), Toast.LENGTH_SHORT).show();
 
-        if(sharedpreferences.getAll().size() < favMaps.size()) {
+        /*if(sharedpreferences.getAll().size() < favMaps.size()) {
             Toast.makeText(getApplicationContext(),
                     "mismatch!", Toast.LENGTH_SHORT).show();
             for(int i = 0; i < favMaps.size(); i++) {
@@ -388,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                SimpleAdapter favAdapter = new SimpleAdapter(getBaseContext(), favMaps, R.layout.favorites, from, to);
+                final FavAdapter favAdapter = new FavAdapter(getBaseContext(), favMaps, R.layout.favorites, from, to);
 
                 DynamicListView favListView = (DynamicListView)findViewById(R.id.fav_details);
                 favListView.setAdapter(favAdapter);
@@ -405,6 +409,22 @@ public class MainActivity extends AppCompatActivity {
                         new GetQuoteOperation().execute(url);
                     }
                 });
+
+                SimpleSwipeUndoAdapter simpleSwipeUndoAdapter = new SimpleSwipeUndoAdapter(favAdapter, MainActivity.this, new OnDismissCallback() {
+                    @Override
+                    public void onDismiss(@NonNull ViewGroup listView, @NonNull int[] reverseSortedPositions) {
+                        for(int i: reverseSortedPositions ) {
+                            Toast.makeText(getApplicationContext(),
+                                    "position: " + i, Toast.LENGTH_SHORT).show();
+                            favMaps.remove(i);
+                            favAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+
+                simpleSwipeUndoAdapter.setAbsListView(favListView);
+                favListView.setAdapter(simpleSwipeUndoAdapter);
+                favListView.enableSimpleSwipeUndo();
             }
         }
         protected String getMarketCap(String marketCap) {
