@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -605,7 +606,7 @@ public class ResultActivity extends Activity {
 
         //img = (ImageView)findViewById(R.id.yahooMap);
 
-        yahooImgSrc = "http://chart.finance.yahoo.com/t?s=" + fb_symbol + "&lang=en-US&width=450&height=350";
+        yahooImgSrc = "http://chart.finance.yahoo.com/t?s=" + fb_symbol + "&lang=en-US&width=250&height=180";
         /*bitmap = BitmapFactory.decodeStream((InputStream)new URL(yahooImgSrc).getContent());
         ImageView newView = new ImageView(getBaseContext());
         newView.setImageBitmap(bitmap);
@@ -1101,11 +1102,16 @@ public class ResultActivity extends Activity {
 
             if(image != null){
                 //img.setImageBitmap(image);
-                ImageView newView = new ImageView(getBaseContext());
+                /*ImageView newView = new ImageView(getBaseContext());
                 newView.setImageBitmap(bitmap);
-                newView.setScaleType(ImageView.ScaleType.FIT_XY);
+                newView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                newView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+                */
+                View footerView = ((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view, null, false);
+                ImageView newView = (ImageView) footerView.findViewById(R.id.yahooFooter);
+                newView.setImageBitmap(bitmap);
 
-                currentView.addFooterView(newView);
+                currentView.addFooterView(footerView);
 
                 //LayoutInflater factory = LayoutInflater.from(ResultActivity.this);
                 final ImageView view = newView;
@@ -1118,7 +1124,8 @@ public class ResultActivity extends Activity {
 
                         ImageView view2 = new ImageView(getBaseContext());
                         view2.setImageDrawable(view.getDrawable());
-                        view2.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        view2.setScaleType(ImageView.ScaleType.FIT_XY);
+                        view2.setAdjustViewBounds(true);
 
                         builder.setView(view2);
 
