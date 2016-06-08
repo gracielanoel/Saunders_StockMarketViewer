@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -169,9 +168,11 @@ public class MainActivity extends AppCompatActivity {
     public void populateFavList() {
         //todo: old shared pref
 
-        ListView myFavView = (ListView)findViewById(R.id.fav_details);
+        /*ListView myFavView = (ListView)findViewById(R.id.fav_details);
         myFavView.setAdapter(null);
-        myFavView.invalidate();
+        myFavView.invalidate();*/
+
+        favMaps.clear();
 
         for(int i=0;i<sharedpreferences.getAll().size();i++)
         {

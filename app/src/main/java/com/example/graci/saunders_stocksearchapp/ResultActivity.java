@@ -16,6 +16,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -486,9 +487,10 @@ public class ResultActivity extends Activity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ResultActivity.this, MainActivity.class);
+                /*(Intent intent = new Intent(ResultActivity.this, MainActivity.class);
                 //intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
+                startActivity(intent);*/
+                onBackPressed();
             }
         });
 
@@ -1184,4 +1186,8 @@ public class ResultActivity extends Activity {
             return builder.create();
         }*/
     }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    { switch (item.getItemId())
+    { case android.R.id.home: onBackPressed(); return true; } return super.onOptionsItemSelected(item); }
 }
